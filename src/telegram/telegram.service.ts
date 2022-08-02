@@ -5,8 +5,11 @@ import { ILike, Repository } from 'typeorm'
 import { findLimit } from '../constants/constants'
 import { ClearText } from '../helpers/clearText'
 
+import { AddToFavouriteDto } from './dtos/addToFavourite.dto'
 import { CreateUserDto } from './dtos/createUser.dto'
 import { CreateVideoDto } from './dtos/createVideo.dto'
+import { FavouriteEntity } from './entities/favourite.entity'
+import { SuspectEntity } from './entities/suspect.entity'
 import { UserEntity } from './entities/user.entity'
 import { VideoEntity } from './entities/video.entity'
 
@@ -17,6 +20,10 @@ export class TelegramService {
         private readonly _usersRepository: Repository<UserEntity>,
         @InjectRepository(VideoEntity)
         private readonly _videosRepository: Repository<VideoEntity>,
+        @InjectRepository(FavouriteEntity)
+        private readonly _favouriteRepository: Repository<FavouriteEntity>,
+        @InjectRepository(SuspectEntity)
+        private readonly _suspectRepository: Repository<SuspectEntity>,
     ) {}
 
     async findUser(chat_id: number): Promise<UserEntity | undefined> {
@@ -43,5 +50,40 @@ export class TelegramService {
 
     async saveVideo(data: CreateVideoDto): Promise<VideoEntity> {
         return await this._videosRepository.save(data)
+    }
+
+    async addToFavourite(data: AddToFavouriteDto): Promise<FavouriteEntity> {
+        const video = await this._videosRepository.findOne({
+            where: { message_id: data.message_id },
+        })
+        if (!video) {
+            throw new Error('Такого видео нет')
+        }
+        return await this._favouriteRepository.save({ ...data, video })
+    }
+
+    async findFavourite(
+        chat_owner_id: number,
+        skip: number,
+    ): Promise<FavouriteEntity[]> {
+        return await this._favouriteRepository.find({
+            where: { chat_owner_id },
+            take: findLimit,
+            skip,
+            relations: ['video'],
+        })
+    }
+
+    async makeSuspect(
+        who_complained: number,
+        message_id: number,
+    ): Promise<SuspectEntity> {
+        const video = await this._videosRepository.findOne({
+            where: { message_id },
+        })
+        if (!video) {
+            throw new Error('Такого видео нет')
+        }
+        return await this._suspectRepository.save({ who_complained, video })
     }
 }

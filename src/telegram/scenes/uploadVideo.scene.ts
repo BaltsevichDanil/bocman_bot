@@ -75,7 +75,18 @@ export class UploadVideoScene {
 
     @Command(commands.cancel)
     async exit(@Ctx() ctx: Scenes.WizardContext): Promise<void> {
-        await ctx.reply(UploadVideoData.cancel.reply)
+        await ctx.replyWithMarkdownV2(UploadVideoData.cancel.reply, {
+            reply_markup: {
+                keyboard: [
+                    [
+                        { text: 'Поиск' },
+                        { text: 'Все видео' },
+                        { text: 'Показать избранное' },
+                    ],
+                ],
+                resize_keyboard: true,
+            },
+        })
         await ctx.scene.leave()
     }
 }

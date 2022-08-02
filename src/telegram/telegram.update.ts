@@ -24,7 +24,13 @@ export class TelegramUpdate {
             `Просто введи фразу, которая звучала в видосе и бот пересмотрит всю свою базу ради того, чтобы найти это видео для тебя😎`,
             {
                 reply_markup: {
-                    keyboard: [[{ text: 'Показать все доступные видео' }]],
+                    keyboard: [
+                        [
+                            { text: 'Поиск' },
+                            { text: 'Все видео' },
+                            { text: 'Показать избранное' },
+                        ],
+                    ],
                     resize_keyboard: true,
                 },
             },
@@ -36,12 +42,19 @@ export class TelegramUpdate {
         await ctx.scene.enter(UploadVideoData.sceneName)
     }
 
+    @Hears('Поиск')
     @Command(commands.video)
     async findVideo(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
         await ctx.scene.enter(FindVideoData.sceneName)
     }
 
-    @Hears('Показать все доступные видео')
+    @Hears('Показать избранное')
+    @Command(commands.favourite)
+    async showFavourite(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+        await ctx.scene.enter(commands.favourite)
+    }
+
+    @Hears('Все видео')
     @Command(commands.videos)
     async findVideos(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
         await ctx.scene.enter('find_all_videos')

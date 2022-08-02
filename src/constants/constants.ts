@@ -4,6 +4,10 @@ export const commands = {
     videos: 'videos',
     upload: 'upload',
     cancel: 'cancel',
+    next: 'next',
+    prev: 'prev',
+    favourite: 'favourite',
+    ban: 'ban',
 }
 export const maxTextLength = 100
 export const findLimit = 8

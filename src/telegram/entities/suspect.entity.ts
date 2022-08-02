@@ -11,13 +11,13 @@ import {
 
 import { VideoEntity } from './video.entity'
 
-@Entity('favourite')
-export class FavouriteEntity extends BaseEntity {
+@Entity('suspect')
+export class SuspectEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
     @Column()
-    chat_owner_id: number
+    who_complained: number
 
     @OneToOne(() => VideoEntity)
     @JoinColumn()
