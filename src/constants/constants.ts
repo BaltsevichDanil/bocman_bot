@@ -1,7 +1,9 @@
-export const ChannelName = '@bocmanchik'
+export const channelName = '@bocmanchik'
 export const commands = {
-    command1: 'command1',
-    command2: 'command2',
+    video: 'video',
+    videos: 'videos',
+    upload: 'upload',
     cancel: 'cancel',
 }
-export const max_text_length = 100
+export const maxTextLength = 100
+export const findLimit = 8

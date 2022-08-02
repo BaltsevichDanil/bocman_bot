@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ILike, Repository } from 'typeorm'
 
+import { findLimit } from '../constants/constants'
 import { ClearText } from '../helpers/clearText'
 
 import { CreateUserDto } from './dtos/createUser.dto'
@@ -34,6 +35,10 @@ export class TelegramService {
         return await this._videosRepository.findOne({
             where: { text: ILike(ClearText(text)) },
         })
+    }
+
+    async findAllVideos(skip: number): Promise<VideoEntity[]> {
+        return await this._videosRepository.find({ skip, take: findLimit })
     }
 
     async saveVideo(data: CreateVideoDto): Promise<VideoEntity> {

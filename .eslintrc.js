@@ -34,6 +34,7 @@ module.exports = {
       'array-callback-return': 'error',
       'brace-style': ['error', '1tbs', { allowSingleLine: false }],
       'no-return-await': 'off',
+      'no-lonely-if': 'off',
       'no-invalid-this': 'off',
       'no-empty-pattern': 'error',
       'no-magic-numbers': 'off',

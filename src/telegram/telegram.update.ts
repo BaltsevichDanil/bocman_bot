@@ -1,8 +1,9 @@
-import { Command, Ctx, Help, Start, Update } from 'nestjs-telegraf'
+import { Command, Ctx, Hears, Start, Update } from 'nestjs-telegraf'
 import { Context, Scenes } from 'telegraf'
 
 import { commands } from '../constants/constants'
 
+import { FindVideoData } from './scenes/data/findVideo.data'
 import { UploadVideoData } from './scenes/data/uploadVideo.data'
 import { TelegramService } from './telegram.service'
 
@@ -30,18 +31,19 @@ export class TelegramUpdate {
         )
     }
 
-    @Command(commands.command2)
+    @Command(commands.upload)
     async uploadVideo(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
         await ctx.scene.enter(UploadVideoData.sceneName)
     }
 
-    @Command(commands.command1)
+    @Command(commands.video)
     async findVideo(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        await ctx.scene.enter('find_video')
+        await ctx.scene.enter(FindVideoData.sceneName)
     }
 
-    @Help()
-    async help(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        ctx.scene.enter('basicScene')
+    @Hears('Показать все доступные видео')
+    @Command(commands.videos)
+    async findVideos(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+        await ctx.scene.enter('find_all_videos')
     }
 }

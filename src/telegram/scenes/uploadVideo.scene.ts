@@ -1,11 +1,7 @@
 import { Command, Ctx, Wizard, WizardStep } from 'nestjs-telegraf'
 import { Scenes } from 'telegraf'
 
-import {
-    ChannelName,
-    commands,
-    max_text_length,
-} from '../../constants/constants'
+import { channelName, commands, maxTextLength } from '../../constants/constants'
 import { ClearText } from '../../helpers/clearText'
 import { TelegramService } from '../telegram.service'
 
@@ -31,19 +27,20 @@ export class UploadVideoScene {
                 await ctx.reply(UploadVideoData.haveThisVideo.reply)
                 await ctx.telegram.copyMessage(
                     chat.id,
-                    ChannelName,
+                    channelName,
                     video.message_id,
                 )
                 await ctx.scene.leave()
-            }
-            if (text.length > max_text_length) {
-                await ctx.reply(UploadVideoData.maxTextLengthError.reply)
-                ctx.wizard.selectStep(UploadVideoData.introduction.step)
             } else {
-                // @ts-ignore
-                ctx.wizard.state.text = text
-                await ctx.reply(UploadVideoData.sendVideo.reply)
-                ctx.wizard.next()
+                if (text.length > maxTextLength) {
+                    await ctx.reply(UploadVideoData.maxTextLengthError.reply)
+                    ctx.wizard.selectStep(UploadVideoData.introduction.step)
+                } else {
+                    // @ts-ignore
+                    ctx.wizard.state.text = text
+                    await ctx.reply(UploadVideoData.sendVideo.reply)
+                    ctx.wizard.next()
+                }
             }
         }
     }
@@ -54,7 +51,7 @@ export class UploadVideoScene {
         const { video, message_id, chat } = ctx.message
         if (chat && message_id && video) {
             const savedMessage = await ctx.telegram.copyMessage(
-                ChannelName,
+                channelName,
                 chat.id,
                 message_id,
             )
@@ -68,7 +65,7 @@ export class UploadVideoScene {
             await ctx.reply(UploadVideoData.result.reply)
             await ctx.telegram.copyMessage(
                 chat.id,
-                ChannelName,
+                channelName,
                 result.message_id,
                 { caption: result.text },
             )

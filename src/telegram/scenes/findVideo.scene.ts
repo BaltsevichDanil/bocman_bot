@@ -1,7 +1,7 @@
 import { Command, Ctx, Wizard, WizardStep } from 'nestjs-telegraf'
 import { Scenes } from 'telegraf'
 
-import { ChannelName, commands } from '../../constants/constants'
+import { channelName, commands } from '../../constants/constants'
 import { TelegramService } from '../telegram.service'
 
 import { FindVideoData } from './data/findVideo.data'
@@ -26,9 +26,22 @@ export class FindVideoScene {
             if (video) {
                 await ctx.telegram.copyMessage(
                     chat.id,
-                    ChannelName,
+                    channelName,
                     video.message_id,
                 )
+                await ctx.replyWithMarkdownV2('Как тебе?', {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                {
+                                    text: '❤️',
+                                    callback_data: 'add_to_favourite',
+                                },
+                                { text: 'Бан', callback_data: 'ban' },
+                            ],
+                        ],
+                    },
+                })
             } else {
                 await ctx.reply(FindVideoData.nothingFound.reply)
             }
