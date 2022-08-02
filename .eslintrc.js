@@ -21,7 +21,6 @@ module.exports = {
   settings: { 'import/resolver': { typescript: {} } },
   rules: {
       '@typescript-eslint/no-useless-constructor': 'off',
-      camelcase: 'off',
       'no-unsafe-finally': 'off',
       'import/no-extraneous-dependencies': 'off',
       'import/no-cycle': 'off',
@@ -42,6 +41,7 @@ module.exports = {
       'object-shorthand': ['error', 'always'],
       'space-before-blocks': 'error',
       '@typescript-eslint/array-type': 'error',
+      '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/explicit-member-accessibility': [
           'error',
@@ -61,7 +61,7 @@ module.exports = {
           },
           {
               selector: 'variable',
-              format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+              format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'],
               filter: {
                   regex: '^(.*-.*)$',
                   match: false,
@@ -74,12 +74,12 @@ module.exports = {
           },
           {
               selector: 'parameter',
-              format: ['camelCase'],
+              format: ['camelCase', 'snake_case'],
               leadingUnderscore: 'allow',
           },
           {
               selector: 'memberLike',
-              format: ['camelCase'],
+              format: ['camelCase', 'snake_case'],
               leadingUnderscore: 'allow',
           },
           {
@@ -139,5 +139,5 @@ module.exports = {
       ],
       'no-restricted-syntax': 'off',
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', './src/migrations'],
 }
