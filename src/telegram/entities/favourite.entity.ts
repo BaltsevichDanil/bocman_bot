@@ -4,7 +4,7 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
-    OneToOne,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -19,7 +19,7 @@ export class FavouriteEntity extends BaseEntity {
     @Column()
     chat_owner_id: number
 
-    @OneToOne(() => VideoEntity, { onDelete: 'CASCADE' })
+    @ManyToOne(() => VideoEntity, { onDelete: 'CASCADE' })
     @JoinColumn()
     video: VideoEntity
 
