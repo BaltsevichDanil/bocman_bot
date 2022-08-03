@@ -59,12 +59,6 @@ export class TelegramService {
         if (!video) {
             throw new Error('Такого видео нет')
         }
-        const favourite = await this._favouriteRepository.findOne({
-            where: { chat_owner_id: data.chat_owner_id },
-        })
-        if (favourite) {
-            return favourite
-        }
         return await this._favouriteRepository.save({ ...data, video })
     }
 
@@ -89,12 +83,6 @@ export class TelegramService {
         })
         if (!video) {
             throw new Error('Такого видео нет')
-        }
-        const suspect = await this._suspectRepository.findOne({
-            video: { message_id },
-        })
-        if (suspect) {
-            return suspect
         }
         return await this._suspectRepository.save({ who_complained, video })
     }

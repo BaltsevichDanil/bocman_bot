@@ -4,7 +4,7 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
-    OneToOne,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -19,7 +19,7 @@ export class SuspectEntity extends BaseEntity {
     @Column()
     who_complained: number
 
-    @OneToOne(() => VideoEntity, { onDelete: 'CASCADE' })
+    @ManyToOne(() => VideoEntity, { onDelete: 'CASCADE' })
     @JoinColumn()
     video: VideoEntity
 
