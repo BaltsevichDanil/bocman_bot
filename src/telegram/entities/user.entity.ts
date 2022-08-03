@@ -7,6 +7,8 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 
+import { RoleEnum } from '../../enums/role.enum'
+
 @Entity('user')
 export class UserEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -14,6 +16,9 @@ export class UserEntity extends BaseEntity {
 
     @Column()
     chat_id: number
+
+    @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.USER })
+    role: RoleEnum
 
     @CreateDateColumn({ type: 'timestamp with time zone', name: 'created_at' })
     createdAt: Date

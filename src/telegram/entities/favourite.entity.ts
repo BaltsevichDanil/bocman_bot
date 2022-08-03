@@ -19,7 +19,7 @@ export class FavouriteEntity extends BaseEntity {
     @Column()
     chat_owner_id: number
 
-    @OneToOne(() => VideoEntity)
+    @OneToOne(() => VideoEntity, { onDelete: 'CASCADE' })
     @JoinColumn()
     video: VideoEntity
 

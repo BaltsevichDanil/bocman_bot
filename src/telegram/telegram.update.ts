@@ -59,4 +59,9 @@ export class TelegramUpdate {
     async findVideos(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
         await ctx.scene.enter('find_all_videos')
     }
+
+    @Command('suspect')
+    async showSuspects(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+        await ctx.scene.enter('suspect')
+    }
 }

@@ -8,6 +8,7 @@ import { VideoEntity } from './entities/video.entity'
 import { FindAllVideosScene } from './scenes/findAllVideos.scene'
 import { FindVideoScene } from './scenes/findVideo.scene'
 import { ShowFavouriteScene } from './scenes/showFavourite.scene'
+import { ShowSuspectsScene } from './scenes/showSuspects.scene'
 import { UploadVideoScene } from './scenes/uploadVideo.scene'
 import { TelegramService } from './telegram.service'
 import { TelegramUpdate } from './telegram.update'
@@ -29,6 +30,7 @@ import { TelegramUpdate } from './telegram.update'
         FindAllVideosScene,
         ShowFavouriteScene,
         FavouriteEntity,
+        ShowSuspectsScene,
     ],
 })
 export class TelegramModule {}

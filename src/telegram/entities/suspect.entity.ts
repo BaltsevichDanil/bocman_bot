@@ -19,7 +19,7 @@ export class SuspectEntity extends BaseEntity {
     @Column()
     who_complained: number
 
-    @OneToOne(() => VideoEntity)
+    @OneToOne(() => VideoEntity, { onDelete: 'CASCADE' })
     @JoinColumn()
     video: VideoEntity
 

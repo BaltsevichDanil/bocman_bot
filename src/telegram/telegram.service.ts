@@ -86,4 +86,23 @@ export class TelegramService {
         }
         return await this._suspectRepository.save({ who_complained, video })
     }
+
+    async getSuspects(): Promise<SuspectEntity[]> {
+        return await this._suspectRepository.find({
+            take: 1,
+            relations: ['video'],
+        })
+    }
+
+    async banVideo(message_id: number): Promise<void> {
+        await this._videosRepository.delete({ message_id })
+    }
+
+    async deleteFromSuspect(message_id: number): Promise<void> {
+        const suspect = await this._suspectRepository.findOne({
+            where: { video: { message_id } },
+            relations: ['video'],
+        })
+        await this._suspectRepository.delete({ id: suspect?.id })
+    }
 }
