@@ -3,15 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { ILike, Repository } from 'typeorm'
 
 import { findLimit } from '../constants/constants'
+import { FavouriteEntity } from '../favourite/entities/favourite.entity'
 import { ClearText } from '../helpers/clearText'
+import { SuspectEntity } from '../suspects/entities/suspect.entity'
+import { VideoEntity } from '../videos/entities/video.entity'
 
-import { AddToFavouriteDto } from './dtos/addToFavourite.dto'
 import { CreateUserDto } from './dtos/createUser.dto'
 import { CreateVideoDto } from './dtos/createVideo.dto'
-import { FavouriteEntity } from './entities/favourite.entity'
-import { SuspectEntity } from './entities/suspect.entity'
 import { UserEntity } from './entities/user.entity'
-import { VideoEntity } from './entities/video.entity'
 
 @Injectable()
 export class TelegramService {
@@ -44,22 +43,8 @@ export class TelegramService {
         })
     }
 
-    async findAllVideos(skip: number): Promise<VideoEntity[]> {
-        return await this._videosRepository.find({ skip, take: findLimit })
-    }
-
     async saveVideo(data: CreateVideoDto): Promise<VideoEntity> {
         return await this._videosRepository.save(data)
-    }
-
-    async addToFavourite(data: AddToFavouriteDto): Promise<FavouriteEntity> {
-        const video = await this._videosRepository.findOne({
-            where: { message_id: data.message_id },
-        })
-        if (!video) {
-            throw new Error('Такого видео нет')
-        }
-        return await this._favouriteRepository.save({ ...data, video })
     }
 
     async findFavourite(
@@ -72,19 +57,6 @@ export class TelegramService {
             skip,
             relations: ['video'],
         })
-    }
-
-    async makeSuspect(
-        who_complained: number,
-        message_id: number,
-    ): Promise<SuspectEntity> {
-        const video = await this._videosRepository.findOne({
-            where: { message_id },
-        })
-        if (!video) {
-            throw new Error('Такого видео нет')
-        }
-        return await this._suspectRepository.save({ who_complained, video })
     }
 
     async getSuspects(): Promise<SuspectEntity[]> {

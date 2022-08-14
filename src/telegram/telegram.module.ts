@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { FavouriteEntity } from './entities/favourite.entity'
-import { SuspectEntity } from './entities/suspect.entity'
+import { FavouriteEntity } from '../favourite/entities/favourite.entity'
+import { SuspectEntity } from '../suspects/entities/suspect.entity'
+import { VideoEntity } from '../videos/entities/video.entity'
+
 import { UserEntity } from './entities/user.entity'
-import { VideoEntity } from './entities/video.entity'
-import { FindAllVideosScene } from './scenes/findAllVideos.scene'
 import { FindVideoScene } from './scenes/findVideo.scene'
 import { ShowFavouriteScene } from './scenes/showFavourite.scene'
 import { ShowSuspectsScene } from './scenes/showSuspects.scene'
@@ -27,7 +27,6 @@ import { TelegramUpdate } from './telegram.update'
         TelegramUpdate,
         UploadVideoScene,
         FindVideoScene,
-        FindAllVideosScene,
         ShowFavouriteScene,
         FavouriteEntity,
         ShowSuspectsScene,

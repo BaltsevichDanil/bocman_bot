@@ -9,15 +9,15 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 
-import { VideoEntity } from './video.entity'
+import { VideoEntity } from '../../videos/entities/video.entity'
 
-@Entity('suspect')
-export class SuspectEntity extends BaseEntity {
+@Entity('favourite')
+export class FavouriteEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
     @Column()
-    who_complained: number
+    chat_owner_id: number
 
     @ManyToOne(() => VideoEntity, { onDelete: 'CASCADE' })
     @JoinColumn()

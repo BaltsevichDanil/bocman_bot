@@ -5,7 +5,7 @@ export class SuspectRefactorMigration1659510562334
 {
     name = 'SuspectRefactorMigration1659510562334'
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
+    async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             ALTER TABLE "suspect" DROP CONSTRAINT "FK_ec4b13e12e50716a7bf1ec5aae3"
         `)
@@ -18,7 +18,7 @@ export class SuspectRefactorMigration1659510562334
         `)
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             ALTER TABLE "suspect" DROP CONSTRAINT "FK_ec4b13e12e50716a7bf1ec5aae3"
         `)

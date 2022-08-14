@@ -1,18 +1,12 @@
-import { Scenes } from 'telegraf'
+import { InlineKeyboardButton } from 'telegraf/typings/core/types/typegram'
+import { SceneContext } from 'telegraf/typings/scenes'
 
 import { commands } from '../constants/constants'
-import { VideoDto } from '../telegram/dtos/video.dto'
-
-interface InlineKeyboardButton {
-    text: string
-    callback_data: string
-}
+import { VideoDto } from '../videos/dtos/video.dto'
 
 export const sendVideos = async (
-    ctx: Scenes.SceneContext,
+    ctx: SceneContext,
     videos: VideoDto[],
-    skip: number,
-    add: number,
 ): Promise<void> => {
     let message = ''
     const buttons: InlineKeyboardButton[] = []
@@ -20,7 +14,7 @@ export const sendVideos = async (
         message += `${i + 1} – ${video.text} \n`
         buttons.push({
             text: (i + 1).toString(),
-            callback_data: i.toString(),
+            callback_data: video.message_id.toString(),
         })
     })
     await ctx.replyWithMarkdownV2(message, {
@@ -35,8 +29,4 @@ export const sendVideos = async (
             ],
         },
     })
-    // @ts-ignore
-    ctx.scene.state.videos = videos
-    // @ts-ignore
-    ctx.scene.state.skip = skip + add
 }

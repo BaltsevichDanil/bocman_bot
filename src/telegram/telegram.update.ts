@@ -2,6 +2,7 @@ import { Command, Ctx, Hears, Start, Update } from 'nestjs-telegraf'
 import { Context, Scenes } from 'telegraf'
 
 import { commands } from '../constants/constants'
+import { SceneNameEnum } from '../enums/scene-name.enum'
 
 import { FindVideoData } from './scenes/data/findVideo.data'
 import { UploadVideoData } from './scenes/data/uploadVideo.data'
@@ -57,7 +58,7 @@ export class TelegramUpdate {
     @Hears('Все видео')
     @Command(commands.videos)
     async findVideos(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        await ctx.scene.enter('find_all_videos')
+        await ctx.scene.enter(SceneNameEnum.SHOW_VIDEOS)
     }
 
     @Command('suspect')

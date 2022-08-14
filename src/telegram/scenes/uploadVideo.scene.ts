@@ -1,5 +1,7 @@
 import { Command, Ctx, Wizard, WizardStep } from 'nestjs-telegraf'
-import { Scenes } from 'telegraf'
+import { NarrowedContext, Scenes } from 'telegraf'
+import { WizardContext } from 'telegraf/typings/scenes'
+import { MountMap } from 'telegraf/typings/telegram-types'
 
 import { channelName, commands, maxTextLength } from '../../constants/constants'
 import { ClearText } from '../../helpers/clearText'
@@ -12,16 +14,17 @@ export class UploadVideoScene {
     constructor(private readonly _telegramService: TelegramService) {}
 
     @WizardStep(UploadVideoData.introduction.step)
-    async step1(@Ctx() ctx: Scenes.WizardContext): Promise<void> {
+    async onEnter(@Ctx() ctx: WizardContext): Promise<void> {
         await ctx.reply(UploadVideoData.introduction.reply)
         await ctx.wizard.next()
     }
 
     @WizardStep(UploadVideoData.sendVideo.step)
-    async step2(@Ctx() ctx: Scenes.WizardContext): Promise<void> {
-        // @ts-ignore
+    async getText(
+        @Ctx() ctx: NarrowedContext<WizardContext, MountMap['text']>,
+    ): Promise<void> {
         const { text, message_id, chat } = ctx.message
-        if (chat && message_id && typeof text === 'string') {
+        if (chat && message_id) {
             const video = await this._telegramService.findVideo(text)
             if (video) {
                 await ctx.reply(UploadVideoData.haveThisVideo.reply)
@@ -46,8 +49,9 @@ export class UploadVideoScene {
     }
 
     @WizardStep(UploadVideoData.result.step)
-    async step3(@Ctx() ctx: Scenes.WizardContext): Promise<void> {
-        // @ts-ignore
+    async getVideo(
+        @Ctx() ctx: NarrowedContext<WizardContext, MountMap['video']>,
+    ): Promise<void> {
         const { video, message_id, chat } = ctx.message
         if (chat && message_id && video) {
             const savedMessage = await ctx.telegram.copyMessage(
@@ -67,7 +71,19 @@ export class UploadVideoScene {
                 chat.id,
                 channelName,
                 result.message_id,
-                { caption: result.text },
+                {
+                    caption: result.text,
+                    reply_markup: {
+                        keyboard: [
+                            [
+                                { text: 'Поиск' },
+                                { text: 'Все видео' },
+                                { text: 'Показать избранное' },
+                            ],
+                        ],
+                        resize_keyboard: true,
+                    },
+                },
             )
         }
         await ctx.scene.leave()

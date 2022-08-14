@@ -6,7 +6,10 @@ import { TelegrafModule } from 'nestjs-telegraf'
 import { config } from './config/config'
 import { telegrafConfig } from './config/telegraf.config'
 import { typeOrmConfig } from './config/typeorm.config'
+import { FavouriteModule } from './favourite/favourite.module'
+import { SuspectsModule } from './suspects/suspects.module'
 import { TelegramModule } from './telegram/telegram.module'
+import { VideosModule } from './videos/videos.module'
 
 @Module({
     imports: [
@@ -14,6 +17,9 @@ import { TelegramModule } from './telegram/telegram.module'
         TypeOrmModule.forRootAsync(typeOrmConfig),
         TelegrafModule.forRootAsync(telegrafConfig),
         TelegramModule,
+        VideosModule,
+        FavouriteModule,
+        SuspectsModule,
     ],
 })
 export class AppModule {}

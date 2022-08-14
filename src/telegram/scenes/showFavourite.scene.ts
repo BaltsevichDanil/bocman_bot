@@ -3,10 +3,9 @@ import { Scenes } from 'telegraf'
 import { Update } from 'telegraf/typings/core/types/typegram'
 
 import { channelName, commands, findLimit } from '../../constants/constants'
+import { FavouriteEntity } from '../../favourite/entities/favourite.entity'
 import { sendVideos } from '../../helpers/sendVideos'
-import { VideoDto } from '../dtos/video.dto'
-import { FavouriteEntity } from '../entities/favourite.entity'
-import { VideoEntity } from '../entities/video.entity'
+import { VideoDto } from '../../videos/dtos/video.dto'
 import { TelegramService } from '../telegram.service'
 
 @Scene('favourite')
@@ -31,7 +30,7 @@ export class ShowFavouriteScene {
             )
             const videos = this._parseVideos(favourites)
             if (videos.length) {
-                await sendVideos(ctx, videos, skip, videos.length)
+                await sendVideos(ctx, videos)
             } else {
                 ctx.reply('Ничего не нашлось')
                 ctx.scene.leave()
@@ -74,7 +73,7 @@ export class ShowFavouriteScene {
             if (!videos.length) {
                 ctx.reply('Походу все')
             } else {
-                await sendVideos(ctx, videos, skip, videos.length)
+                await sendVideos(ctx, videos)
             }
         }
     }
@@ -96,7 +95,7 @@ export class ShowFavouriteScene {
                 if (!videos.length) {
                     ctx.reply('Чего-то ты намудрил, что у меня все сломалось')
                 } else {
-                    await sendVideos(ctx, videos, skip, -findLimit)
+                    await sendVideos(ctx, videos)
                 }
             }
         }
