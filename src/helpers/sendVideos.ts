@@ -1,7 +1,7 @@
 import { InlineKeyboardButton } from 'telegraf/typings/core/types/typegram'
 import { SceneContext } from 'telegraf/typings/scenes'
 
-import { commands } from '../constants/constants'
+import { ControlCommandEnum } from '../enums/control-command.enum'
 import { VideoDto } from '../videos/dtos/video.dto'
 
 export const sendVideos = async (
@@ -11,7 +11,7 @@ export const sendVideos = async (
     let message = ''
     const buttons: InlineKeyboardButton[] = []
     videos.forEach((video, i) => {
-        message += `${i + 1} – ${video.text} \n`
+        message += `${i + 1} – ${video.text}\n`
         buttons.push({
             text: (i + 1).toString(),
             callback_data: video.message_id.toString(),
@@ -22,9 +22,9 @@ export const sendVideos = async (
             inline_keyboard: [
                 buttons,
                 [
-                    { text: '⬅️', callback_data: 'prev' },
-                    { text: '❌️', callback_data: commands.cancel },
-                    { text: '➡️', callback_data: 'next' },
+                    { text: '⬅️', callback_data: ControlCommandEnum.PREV },
+                    { text: '❌️', callback_data: ControlCommandEnum.CANCEL },
+                    { text: '➡️', callback_data: ControlCommandEnum.NEXT },
                 ],
             ],
         },

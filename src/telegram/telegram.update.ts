@@ -1,22 +1,19 @@
 import { Command, Ctx, Hears, Start, Update } from 'nestjs-telegraf'
 import { Context, Scenes } from 'telegraf'
 
-import { commands } from '../constants/constants'
+import { EnterSceneCommandEnum } from '../enums/enter-scene-command.enum'
 import { SceneNameEnum } from '../enums/scene-name.enum'
-
-import { FindVideoData } from './scenes/data/findVideo.data'
-import { UploadVideoData } from './scenes/data/uploadVideo.data'
-import { TelegramService } from './telegram.service'
+import { UsersService } from '../users/users.service'
 
 @Update()
 export class TelegramUpdate {
-    constructor(private readonly _telegramService: TelegramService) {}
+    constructor(private readonly _usersService: UsersService) {}
 
     @Start()
     async start(@Ctx() ctx: Context): Promise<void> {
         if (ctx.from) {
             const { username, id } = ctx.from
-            await this._telegramService.createUser({ username, chat_id: id })
+            await this._usersService.createUser({ username, chat_id: id })
         }
         await ctx.reply(
             `Привет! Если у тебя сейчас идет важная переписка и тебе срочно понадобился смешной видос, который отбразит твои чувства в данный момент, то этот бот создан для тебя`,
@@ -38,31 +35,31 @@ export class TelegramUpdate {
         )
     }
 
-    @Command(commands.upload)
+    @Command(EnterSceneCommandEnum.UPLOAD)
     async uploadVideo(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        await ctx.scene.enter(UploadVideoData.sceneName)
+        await ctx.scene.enter(SceneNameEnum.UPLOAD_VIDEO)
     }
 
     @Hears('Поиск')
-    @Command(commands.video)
+    @Command(EnterSceneCommandEnum.SEARCH)
     async findVideo(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        await ctx.scene.enter(FindVideoData.sceneName)
+        await ctx.scene.enter(SceneNameEnum.FIND_VIDEO)
     }
 
     @Hears('Показать избранное')
-    @Command(commands.favourite)
+    @Command(EnterSceneCommandEnum.FAVOURITE)
     async showFavourite(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        await ctx.scene.enter(commands.favourite)
+        await ctx.scene.enter(SceneNameEnum.SHOW_FAVOURITE)
     }
 
     @Hears('Все видео')
-    @Command(commands.videos)
+    @Command(EnterSceneCommandEnum.VIDEOS)
     async findVideos(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
         await ctx.scene.enter(SceneNameEnum.SHOW_VIDEOS)
     }
 
-    @Command('suspect')
+    @Command(EnterSceneCommandEnum.SUSPECTS)
     async showSuspects(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-        await ctx.scene.enter('suspect')
+        await ctx.scene.enter(SceneNameEnum.SHOW_SUSPECTS)
     }
 }

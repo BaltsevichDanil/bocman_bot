@@ -3,6 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -15,6 +16,7 @@ export class VideoEntity extends BaseEntity {
     @Column()
     owner_chat_id: number
 
+    @Index({ fulltext: true })
     @Column('text')
     text: string
 

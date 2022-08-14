@@ -1,21 +1,28 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf'
 import { Scenes } from 'telegraf'
 import { Update } from 'telegraf/typings/core/types/typegram'
+import { SceneContext } from 'telegraf/typings/scenes'
 
 import { channelName } from '../../constants/constants'
+import { ControlCommandEnum } from '../../enums/control-command.enum'
 import { RoleEnum } from '../../enums/role.enum'
-import { TelegramService } from '../telegram.service'
+import { SceneNameEnum } from '../../enums/scene-name.enum'
+import { UsersService } from '../../users/users.service'
+import { SuspectsService } from '../suspects.service'
 
-@Scene('suspect')
+@Scene(SceneNameEnum.SHOW_SUSPECTS)
 export class ShowSuspectsScene {
-    constructor(private readonly _telegramService: TelegramService) {}
+    constructor(
+        private readonly _suspectsService: SuspectsService,
+        private readonly _usersService: UsersService,
+    ) {}
 
     @SceneEnter()
-    async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    async onStart(@Ctx() ctx: SceneContext): Promise<void> {
         if (ctx.chat?.id) {
-            const user = await this._telegramService.findUser(ctx.chat.id)
+            const user = await this._usersService.findUser(ctx.chat.id)
             if (user?.role === RoleEnum.ADMIN) {
-                const suspects = await this._telegramService.getSuspects()
+                const suspects = await this._suspectsService.getSuspects()
                 const suspect = suspects[0]
                 if (suspect) {
                     await ctx.telegram.copyMessage(
@@ -30,14 +37,20 @@ export class ShowSuspectsScene {
                         reply_markup: {
                             inline_keyboard: [
                                 [
-                                    { text: '👍', callback_data: 'good' },
-                                    { text: '🤡', callback_data: 'bad' },
+                                    {
+                                        text: '👍',
+                                        callback_data: ControlCommandEnum.GOOD,
+                                    },
+                                    {
+                                        text: '🤡',
+                                        callback_data: ControlCommandEnum.BAD,
+                                    },
                                 ],
                             ],
                         },
                     })
-                    // @ts-ignore
-                    ctx.scene.state.message_id = suspect.video.message_id
+                    ;(ctx.scene.state as { message_id: number }).message_id =
+                        suspect.video.message_id
                 } else {
                     await ctx.reply('Подозреваемых нет')
                     await ctx.scene.leave()
@@ -55,13 +68,12 @@ export class ShowSuspectsScene {
     ): Promise<void> {
         const cbQuery = ctx.update.callback_query
         const userAnswer = 'data' in cbQuery ? cbQuery.data : null
-        // @ts-ignore
-        const { message_id } = ctx.scene.state
-        if (userAnswer === 'good' && message_id) {
-            await this._telegramService.deleteFromSuspect(message_id)
+        const { message_id } = ctx.scene.state as { message_id: number }
+        if (userAnswer === ControlCommandEnum.GOOD && message_id) {
+            await this._suspectsService.deleteFromSuspect(message_id)
         }
-        if (userAnswer === 'bad' && message_id) {
-            await this._telegramService.banVideo(message_id)
+        if (userAnswer === ControlCommandEnum.BAD && message_id) {
+            await this._suspectsService.banVideo(message_id)
         }
         await ctx.scene.reenter()
     }

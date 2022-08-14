@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { FavouriteEntity } from '../favourite/entities/favourite.entity'
 import { VideoEntity } from '../videos/entities/video.entity'
 
 import { MakeSuspectDto } from './dtos/make-suspect.dto'
@@ -14,7 +13,7 @@ export class SuspectsService {
         @InjectRepository(SuspectEntity)
         private readonly _suspectsRepository: Repository<SuspectEntity>,
         @InjectRepository(VideoEntity)
-        private readonly _videosRepository: Repository<FavouriteEntity>,
+        private readonly _videosRepository: Repository<VideoEntity>,
     ) {}
 
     async makeSuspect(data: MakeSuspectDto): Promise<SuspectEntity> {
@@ -39,5 +38,24 @@ export class SuspectsService {
             who_complained: data.who_complained,
             video,
         })
+    }
+
+    async getSuspects(): Promise<SuspectEntity[]> {
+        return await this._suspectsRepository.find({
+            take: 1,
+            relations: ['video'],
+        })
+    }
+
+    async banVideo(message_id: number): Promise<void> {
+        await this._videosRepository.delete({ message_id })
+    }
+
+    async deleteFromSuspect(message_id: number): Promise<void> {
+        const suspect = await this._suspectsRepository.findOne({
+            where: { video: { message_id } },
+            relations: ['video'],
+        })
+        await this._suspectsRepository.delete({ id: suspect?.id })
     }
 }

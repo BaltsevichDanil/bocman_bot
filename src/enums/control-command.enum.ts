@@ -4,4 +4,6 @@ export enum ControlCommandEnum {
     CANCEL = 'cancel',
     LIKE = 'like',
     BAN = 'ban',
+    BAD = 'bad',
+    GOOD = 'good',
 }

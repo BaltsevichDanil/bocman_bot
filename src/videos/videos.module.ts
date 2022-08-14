@@ -6,7 +6,9 @@ import { FavouriteModule } from '../favourite/favourite.module'
 import { SuspectsModule } from '../suspects/suspects.module'
 
 import { VideoEntity } from './entities/video.entity'
+import { FindVideoScene } from './scenes/find-video.scene'
 import { ShowVideosScene } from './scenes/show-videos.scene'
+import { UploadVideoScene } from './scenes/upload-video.scene'
 import { VideosService } from './videos.service'
 
 @Module({
@@ -15,6 +17,11 @@ import { VideosService } from './videos.service'
         FavouriteModule,
         SuspectsModule,
     ],
-    providers: [VideosService, ShowVideosScene],
+    providers: [
+        VideosService,
+        ShowVideosScene,
+        FindVideoScene,
+        UploadVideoScene,
+    ],
 })
 export class VideosModule {}

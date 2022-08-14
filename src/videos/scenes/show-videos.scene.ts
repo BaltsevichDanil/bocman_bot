@@ -1,4 +1,4 @@
-import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf'
+import { Action, Command, Ctx, Scene, SceneEnter } from 'nestjs-telegraf'
 import { Update } from 'telegraf/typings/core/types/typegram'
 import { SceneContext } from 'telegraf/typings/scenes'
 
@@ -134,5 +134,12 @@ export class ShowVideosScene {
                 await ctx.reply(e.message)
             }
         }
+    }
+
+    @Action(ControlCommandEnum.CANCEL)
+    @Command(ControlCommandEnum.CANCEL)
+    async onCancel(@Ctx() ctx: SceneContext): Promise<void> {
+        await ctx.reply('А чего это мы вдруг? Ну ладно выхожу..')
+        await ctx.scene.leave()
     }
 }

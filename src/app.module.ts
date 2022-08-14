@@ -9,6 +9,7 @@ import { typeOrmConfig } from './config/typeorm.config'
 import { FavouriteModule } from './favourite/favourite.module'
 import { SuspectsModule } from './suspects/suspects.module'
 import { TelegramModule } from './telegram/telegram.module'
+import { UsersModule } from './users/users.module'
 import { VideosModule } from './videos/videos.module'
 
 @Module({
@@ -20,6 +21,7 @@ import { VideosModule } from './videos/videos.module'
         VideosModule,
         FavouriteModule,
         SuspectsModule,
+        UsersModule,
     ],
 })
 export class AppModule {}
