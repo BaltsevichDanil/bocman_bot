@@ -7,7 +7,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start --exec \"node -r source-map-support/register\"",
     "start:dev": "nest start --watch --exec \"node -r source-map-support/register\"",
     "start:debug": "nest start --debug --watch",

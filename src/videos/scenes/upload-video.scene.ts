@@ -7,6 +7,7 @@ import { channelName, maxTextLength } from '../../constants/constants'
 import { ControlCommandEnum } from '../../enums/control-command.enum'
 import { SceneNameEnum } from '../../enums/scene-name.enum'
 import { clearText } from '../../helpers/clearText'
+import { keyboardRefactor } from '../../helpers/keyboard.refactor'
 import { VideosService } from '../videos.service'
 
 const steps = {
@@ -72,7 +73,21 @@ export class UploadVideoScene {
                 message_id: savedMessage.message_id,
                 owner_chat_id: chat.id,
             })
-            await ctx.reply('Вот, что получилось:')
+            await ctx.replyWithMarkdownV2(
+                keyboardRefactor('Вот, что получилось:'),
+                {
+                    reply_markup: {
+                        keyboard: [
+                            [
+                                { text: 'Поиск' },
+                                { text: 'Все видео' },
+                                { text: 'Показать избранное' },
+                            ],
+                        ],
+                        resize_keyboard: true,
+                    },
+                },
+            )
             await ctx.telegram.copyMessage(
                 chat.id,
                 channelName,
@@ -87,7 +102,18 @@ export class UploadVideoScene {
 
     @Command(ControlCommandEnum.CANCEL)
     async exit(@Ctx() ctx: Scenes.WizardContext): Promise<void> {
-        await ctx.reply('Галя, отмена')
+        await ctx.replyWithMarkdownV2(keyboardRefactor('Галя, отмена'), {
+            reply_markup: {
+                keyboard: [
+                    [
+                        { text: 'Поиск' },
+                        { text: 'Все видео' },
+                        { text: 'Показать избранное' },
+                    ],
+                ],
+                resize_keyboard: true,
+            },
+        })
         await ctx.scene.leave()
     }
 }

@@ -52,7 +52,18 @@ export class ShowSuspectsScene {
                     ;(ctx.scene.state as { message_id: number }).message_id =
                         suspect.video.message_id
                 } else {
-                    await ctx.reply('Подозреваемых нет')
+                    await ctx.replyWithMarkdownV2('Подозреваемых нет', {
+                        reply_markup: {
+                            keyboard: [
+                                [
+                                    { text: 'Поиск' },
+                                    { text: 'Все видео' },
+                                    { text: 'Показать избранное' },
+                                ],
+                            ],
+                            resize_keyboard: true,
+                        },
+                    })
                     await ctx.scene.leave()
                 }
             } else {
