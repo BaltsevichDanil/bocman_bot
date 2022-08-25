@@ -23,5 +23,6 @@ import { VideosService } from './videos.service'
         FindVideoScene,
         UploadVideoScene,
     ],
+    exports: [VideosService],
 })
 export class VideosModule {}
