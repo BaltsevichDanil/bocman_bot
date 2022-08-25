@@ -31,4 +31,8 @@ export class VideosService {
     async saveVideo(data: CreateVideoDto): Promise<VideoEntity> {
         return await this._videosRepository.save(data)
     }
+
+    async videosCount(): Promise<number> {
+        return await this._videosRepository.count()
+    }
 }

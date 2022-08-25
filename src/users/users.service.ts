@@ -23,4 +23,8 @@ export class UsersService {
         }
         return await this._usersRepository.save(data)
     }
+
+    async usersCount(): Promise<number> {
+        return await this._usersRepository.count()
+    }
 }

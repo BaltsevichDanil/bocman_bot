@@ -1,6 +1,6 @@
 export enum EnterSceneCommandEnum {
     UPLOAD = 'upload',
-    SEARCH = 'search',
+    SEARCH = 'video',
     VIDEOS = 'videos',
     FAVOURITE = 'favourite',
     SUSPECTS = 'suspects',
