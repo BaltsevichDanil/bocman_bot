@@ -5,6 +5,7 @@ import { SceneContext } from 'telegraf/typings/scenes'
 import { channelName, findLimit } from '../../constants/constants'
 import { ControlCommandEnum } from '../../enums/control-command.enum'
 import { SceneNameEnum } from '../../enums/scene-name.enum'
+import { keyboardRefactor } from '../../helpers/keyboard.refactor'
 import { sendVideos } from '../../helpers/sendVideos'
 import { SkipVideoInterface } from '../../videos/interfaces/skip-video.interface'
 import { FavouriteService } from '../favourite.service'
@@ -24,7 +25,23 @@ export class ShowFavouriteScene {
                 await sendVideos(ctx, videos)
                 ;(ctx.scene.state as SkipVideoInterface).skip = 0
             } else {
-                await ctx.reply('Видимо ты еще не добавлял видео в избранное')
+                await ctx.replyWithMarkdownV2(
+                    keyboardRefactor(
+                        'Видимо ты еще не добавлял видео в избранное',
+                    ),
+                    {
+                        reply_markup: {
+                            keyboard: [
+                                [
+                                    { text: 'Поиск' },
+                                    { text: 'Все видео' },
+                                    { text: 'Показать избранное' },
+                                ],
+                            ],
+                            resize_keyboard: true,
+                        },
+                    },
+                )
                 await ctx.scene.leave()
             }
         }
@@ -93,7 +110,21 @@ export class ShowFavouriteScene {
     @Action(ControlCommandEnum.CANCEL)
     @Command(ControlCommandEnum.CANCEL)
     async onCancel(@Ctx() ctx: SceneContext): Promise<void> {
-        await ctx.reply('А чего это мы вдруг? Ну ладно выхожу..')
+        await ctx.replyWithMarkdownV2(
+            keyboardRefactor('А чего это мы вдруг? Ну ладно выхожу..'),
+            {
+                reply_markup: {
+                    keyboard: [
+                        [
+                            { text: 'Поиск' },
+                            { text: 'Все видео' },
+                            { text: 'Показать избранное' },
+                        ],
+                    ],
+                    resize_keyboard: true,
+                },
+            },
+        )
         await ctx.scene.leave()
     }
 }
