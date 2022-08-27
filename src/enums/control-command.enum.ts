@@ -6,5 +6,5 @@ export enum ControlCommandEnum {
     BAN = 'ban',
     BAD = 'bad',
     GOOD = 'good',
-    STATISTICS = 'statistics',
+    ANSWER = 'answer',
 }

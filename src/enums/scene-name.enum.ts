@@ -4,4 +4,6 @@ export enum SceneNameEnum {
     SHOW_FAVOURITE = 'show_favourite',
     UPLOAD_VIDEO = 'upload_video',
     SHOW_SUSPECTS = 'show-suspects',
+    SEND_SUPPORT = 'send_support',
+    READ_SUPPORT = 'read_support',
 }
