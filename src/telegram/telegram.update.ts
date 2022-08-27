@@ -1,7 +1,7 @@
 import { Command, Ctx, Hears, Start, Update } from 'nestjs-telegraf'
 import { Context, Scenes } from 'telegraf'
+import { SceneContext } from 'telegraf/typings/scenes'
 
-import { ControlCommandEnum } from '../enums/control-command.enum'
 import { EnterSceneCommandEnum } from '../enums/enter-scene-command.enum'
 import { RoleEnum } from '../enums/role.enum'
 import { SceneNameEnum } from '../enums/scene-name.enum'
@@ -69,7 +69,7 @@ export class TelegramUpdate {
         await ctx.scene.enter(SceneNameEnum.SHOW_SUSPECTS)
     }
 
-    @Command(ControlCommandEnum.STATISTICS)
+    @Command(EnterSceneCommandEnum.STATISTICS)
     async showStatistics(@Ctx() ctx: Context): Promise<void> {
         if (ctx.chat?.id) {
             const user = await this._usersService.findUser(ctx.chat.id)
@@ -81,5 +81,15 @@ export class TelegramUpdate {
                 )
             }
         }
+    }
+
+    @Command(EnterSceneCommandEnum.SUPPORT)
+    async getSupport(@Ctx() ctx: SceneContext): Promise<void> {
+        await ctx.scene.enter(SceneNameEnum.SEND_SUPPORT)
+    }
+
+    @Command(EnterSceneCommandEnum.READ_SUPPORT)
+    async readSupport(@Ctx() ctx: SceneContext): Promise<void> {
+        await ctx.scene.enter(SceneNameEnum.READ_SUPPORT)
     }
 }

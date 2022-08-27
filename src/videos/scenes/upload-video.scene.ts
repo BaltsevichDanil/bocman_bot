@@ -7,7 +7,7 @@ import { channelName, maxTextLength } from '../../constants/constants'
 import { ControlCommandEnum } from '../../enums/control-command.enum'
 import { SceneNameEnum } from '../../enums/scene-name.enum'
 import { clearText } from '../../helpers/clearText'
-import { keyboardRefactor } from '../../helpers/keyboard.refactor'
+import { keyboardRefactor } from '../../helpers/keyboard-refactor'
 import { VideosService } from '../videos.service'
 
 const steps = {
