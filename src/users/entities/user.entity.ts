@@ -14,7 +14,7 @@ export class UserEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
+    @Column('numeric')
     chat_id: number
 
     @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.USER })
