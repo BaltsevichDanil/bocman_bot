@@ -6,7 +6,6 @@ import { MountMap } from 'telegraf/typings/telegram-types'
 import { channelName, maxTextLength } from '../../constants/constants'
 import { ControlCommandEnum } from '../../enums/control-command.enum'
 import { SceneNameEnum } from '../../enums/scene-name.enum'
-import { clearText } from '../../helpers/clearText'
 import { keyboardRefactor } from '../../helpers/keyboard-refactor'
 import { VideosService } from '../videos.service'
 
@@ -69,7 +68,7 @@ export class UploadVideoScene {
             )
             const { text } = ctx.wizard.state as { text: string }
             const result = await this._videosService.saveVideo({
-                text: clearText(text),
+                text,
                 message_id: savedMessage.message_id,
                 owner_chat_id: chat.id,
             })

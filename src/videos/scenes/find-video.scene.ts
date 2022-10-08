@@ -6,7 +6,6 @@ import { MountMap } from 'telegraf/typings/telegram-types'
 import { channelName } from '../../constants/constants'
 import { ControlCommandEnum } from '../../enums/control-command.enum'
 import { SceneNameEnum } from '../../enums/scene-name.enum'
-import { clearText } from '../../helpers/clearText'
 import { VideosService } from '../videos.service'
 
 @Scene(SceneNameEnum.FIND_VIDEO)
@@ -40,7 +39,7 @@ export class FindVideoScene {
             await ctx.scene.leave()
         } else {
             const video = await this._videosService.findVideoByText(
-                clearText(ctx.message.text),
+                ctx.message.text,
             )
             if (!video) {
                 await ctx.replyWithMarkdownV2('Ничего не нашлось🥲', {

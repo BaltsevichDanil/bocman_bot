@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ILike, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 import { findLimit } from '../constants/constants'
 
@@ -23,9 +23,14 @@ export class VideosService {
     }
 
     async findVideoByText(text: string): Promise<VideoEntity | undefined> {
-        return await this._videosRepository.findOne({
-            where: { text: ILike(text) },
-        })
+        const formattedQuery = text.trim().replace(/ /g, ' & ')
+        return await this._videosRepository
+            .createQueryBuilder('video')
+            .where(
+                `to_tsvector('simple',video.text) @@ to_tsquery('simple', :query)`,
+                { query: `${formattedQuery}:*` },
+            )
+            .getOne()
     }
 
     async saveVideo(data: CreateVideoDto): Promise<VideoEntity> {
